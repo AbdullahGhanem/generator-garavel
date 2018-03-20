@@ -1,0 +1,9 @@
+{
+  "generator-node": {
+    "promptValues": {
+      "authorName": "Abdullah Ghanem",
+      "authorEmail": "3bdullah.ghanem@gmail.com",
+      "authorUrl": ""
+    }
+  }
+}
