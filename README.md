@@ -1,6 +1,9 @@
 # generator-garavel [![NPM version][npm-image]][npm-url] [![Build Status][travis-image]][travis-url] [![Dependency Status][daviddm-image]][daviddm-url] [![Coverage percentage][coveralls-image]][coveralls-url]
 > laravel generator
 
+
+![https://files.slack.com/files-pri/T04B88R0B-F9TND78R0/artboard_1.jpg](https://files.slack.com/files-pri/T04B88R0B-F9TND78R0/artboard_1.jpg)
+
 ## Installation
 
 First, install [Yeoman](http://yeoman.io) and generator-garavel using [npm](https://www.npmjs.com/) (we assume you have pre-installed [node.js](https://nodejs.org/)).
