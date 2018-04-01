@@ -1,22 +1,22 @@
 'use strict';
 const Generator = require('yeoman-generator');
-const chalk = require('chalk');
 
 module.exports = class extends Generator {
   prompting() {
-
     const prompts = [
       {
         type: 'input',
-        name: 'app_name',
+        name: 'appName',
         message: "What's the name of your application?",
         default: 'application'
       },
       {
         type: 'input',
-        name: 'db_name',
+        name: 'dbName',
         message: "What's the name of your Database?",
-        default: function (previous_answer) { return previous_answer.app_name; },
+        default: function(previousAnswer) {
+          return previousAnswer.appName;
+        }
       },
       {
         type: 'list',
@@ -27,28 +27,28 @@ module.exports = class extends Generator {
       },
       {
         type: 'checkbox',
-        name: 'dev_packages',
+        name: 'devPackages',
         message: 'Which laravel frontend preset do you want to use?',
         choices: [
-            {
-                name: "barryvdh/laravel-debugbar",
-                checked: true
-            },
-            {
-                name: "doctrine/dbal",
-                checked: true
-            }
-        ],
+          {
+            name: 'barryvdh/laravel-debugbar',
+            checked: true
+          },
+          {
+            name: 'doctrine/dbal',
+            checked: true
+          }
+        ]
       },
       {
         type: 'confirm',
-        name: 'use_api',
+        name: 'useApi',
         message: 'your project use API?',
         default: false
       },
       {
         when: answers => {
-          return answers.use_api === true;
+          return answers.useApi === true;
         },
         type: 'confirm',
         name: 'swagger',
@@ -57,7 +57,7 @@ module.exports = class extends Generator {
       },
       {
         when: answers => {
-          return answers.use_api === true;
+          return answers.useApi === true;
         },
         type: 'confirm',
         name: 'fcm',
@@ -66,10 +66,10 @@ module.exports = class extends Generator {
       },
       {
         when: answers => {
-          return answers.use_api === true;
+          return answers.useApi === true;
         },
         type: 'list',
-        name: 'api_token',
+        name: 'apiToken',
         message: 'Which API Token Authentication use?',
         choices: ['none', 'jwt', 'passport'],
         default: 'none'
@@ -87,89 +87,61 @@ module.exports = class extends Generator {
       'create-project',
       '--prefer-dist',
       'laravel/laravel',
-      this.props.app_name,
+      this.props.appName,
       this.props.version
-    ]);    
-
-    // this.spawnCommandSync('mysql', [
-    //   '-u',
-    //   'root',
-    //   '-e',
-    //   '"create database '+ this.props.db_name +'"'
-    // ]);
-
+    ]);
   }
 
   setApplicationFolder() {
-    this.destinationRoot(this.destinationPath(this.props.app_name));
+    this.destinationRoot(this.destinationPath(this.props.appName));
   }
 
   installdevPackages() {
-    var packages = this.props.dev_packages
-    var arrayLength = this.props.dev_packages.length;
+    var packages = this.props.devPackages;
+    var arrayLength = this.props.devPackages.length;
 
-    if(arrayLength){
+    if (arrayLength) {
       for (var i = 0; i < arrayLength; i++) {
-        this.spawnCommandSync('composer', [
-          'require',
-          '--dev',
-           packages[i]
-        ]);
+        this.spawnCommandSync('composer', ['require', '--dev', packages[i]]);
       }
     }
   }
 
-  // API 
+  // API
   installAPIPackages() {
-    if(this.props.use_api){
-      // jwt
-      if(this.props.api_token == 'jwt'){
-        this.spawnCommandSync('composer', [
-          'require',
-          'tymon/jwt-auth:^1.0'
-        ]);
+    if (this.props.useApi) {
+      // Jwt
+      if (this.props.apiToken === 'jwt') {
+        this.spawnCommandSync('composer', ['require', 'tymon/jwt-auth:^1.0']);
         this.spawnCommandSync('php', [
           'artisan',
           'vendor:publish',
-          '--provider="Tymon\JWTAuth\Providers\LaravelServiceProvider"',
-        ]);      
-        this.spawnCommandSync('php', [
-          'artisan',
-          'jwt:secret',
+          '--provider="TymonJWTAuthProvidersLaravelServiceProvider"'
         ]);
-      // passport
-      }else if(this.props.api_token == 'passport'){
-        this.spawnCommandSync('composer', [
-          'require',
-          'laravel/passport'
-        ]);
-        this.spawnCommandSync('php', [
-          'artisan',
-          'vendor:publish'
-        ]);
+        this.spawnCommandSync('php', ['artisan', 'jwt:secret']);
+        // Passport
+      } else if (this.props.apiToken === 'passport') {
+        this.spawnCommandSync('composer', ['require', 'laravel/passport']);
+        this.spawnCommandSync('php', ['artisan', 'vendor:publish']);
       }
-      //swagger
-      if(this.props.swagger){
+      // Swagger
+      if (this.props.swagger) {
         this.spawnCommandSync('composer', [
           'require',
-          'darkaonline/l5-swagger:'+this.props.version
+          'darkaonline/l5-swagger:' + this.props.version
         ]);
         this.spawnCommandSync('php', [
           'artisan',
           'vendor:publish',
           '--provider',
-          '"L5Swagger\L5SwaggerServiceProvider"'
+          '"L5SwaggerL5SwaggerServiceProvider"'
         ]);
       }
 
-      //fcm
-      if(this.props.fcm){
-        this.spawnCommandSync('composer', [
-          'require',
-          'brozot/laravel-fcm'
-        ]);
+      // Fcm
+      if (this.props.fcm) {
+        this.spawnCommandSync('composer', ['require', 'brozot/laravel-fcm']);
       }
     }
   }
-
 };
