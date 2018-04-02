@@ -2,7 +2,7 @@
 > laravel generator
 
 
-![https://files.slack.com/files-pri/T04B88R0B-F9TND78R0/artboard_1.jpg](https://files.slack.com/files-pri/T04B88R0B-F9TND78R0/artboard_1.jpg)
+![yo Garavel](https://i.imgur.com/OOrTTz4.jpg)
 
 ## Installation
 
